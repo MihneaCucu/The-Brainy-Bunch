@@ -5,13 +5,15 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "NODE_ENV=test node index.js",
+    "dev": "npx nodemon index.js",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "generate": "prisma generate",
-    "seed": "node seeders/seedData.js"
+    "seed": "node seeders/seedData.js",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "lint": "eslint ."
   },
   "keywords": [
     "nodejs",
@@ -29,10 +31,19 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "graphql": "^16.8.1",
-    "graphql-tag": "^2.12.6"
+    "graphql-tag": "^2.12.6",
+    "bcrypt": "^6.0.0",
+    "graphql-http": "^1.22.4",
+    "jsonwebtoken": "^9.0.2",
+    "supertest": "^7.1.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.0",
-    "prisma": "^5.10.0"
+    "prisma": "^5.10.0",
+    "@eslint/js": "^9.38.0",
+    "@faker-js/faker": "^10.1.0",
+    "eslint": "^9.38.0",
+    "globals": "^16.4.0",
+    "jest": "^30.2.0"
   }
 }
