@@ -1,0 +1,37 @@
+{
+  "name": "movie-graphql-api",
+  "version": "1.0.0",
+  "description": "GraphQL API for Movie Database using Prisma and SQLite",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "generate": "prisma generate"
+  },
+  "keywords": [
+    "nodejs",
+    "graphql",
+    "prisma",
+    "sqlite",
+    "apollo-server"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "@prisma/client": "^5.10.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "graphql": "^16.8.1",
+    "graphql-tag": "^2.12.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "prisma": "^5.10.0"
+  }
+}
