@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String?
+  role      Role      @default(USER)
+
+  // Relații
+  reviews   Review[]
+  watchlist Watchlist?
+  ratings   Rating[]
+}
+
+model Movie {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String?
+  releaseYear Int
+  posterUrl   String?
+
+  // Relații
+  reviews     Review[]
+  ratings     Rating[]
+  genres      MovieGenre[]
+  actors      MovieActor[]
+  watchlisted WatchlistMovies[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  // Relații 1:n
+  authorId  Int
+  movieId   Int
+  author    User   @relation(fields: [authorId], references: [id])
+  movie     Movie  @relation(fields: [movieId], references: [id])
+}
+
+model Rating {
+  id       Int     @id @default(autoincrement())
+  score    Int     // ex: 1–5 stele
+  userId   Int
+  movieId  Int
+
+  user     User    @relation(fields: [userId], references: [id])
+  movie    Movie   @relation(fields: [movieId], references: [id])
+
+  @@unique([userId, movieId]) // un user notează un film o singură dată
+}
+
+model Genre {
+  id    Int          @id @default(autoincrement())
+  name  String        @unique
+
+  movies MovieGenre[]
+}
+
+model MovieGenre {
+  movieId Int
+  genreId Int
+
+  movie   Movie @relation(fields: [movieId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
+
+  @@id([movieId, genreId]) // many-to-many pivot
+}
+
+model Actor {
+  id    Int          @id @default(autoincrement())
+  name  String
+
+  movies MovieActor[]
+}
+
+model MovieActor {
+  movieId Int
+  actorId Int
+
+  movie   Movie @relation(fields: [movieId], references: [id])
+  actor   Actor @relation(fields: [actorId], references: [id])
+
+  @@id([movieId, actorId]) // pivot many-to-many
+}
+
+model Watchlist {
+  id       Int               @id @default(autoincrement())
+  userId   Int               @unique
+
+  user     User              @relation(fields: [userId], references: [id])
+  movies   WatchlistMovies[]
+}
+
+model WatchlistMovies {
+  watchlistId Int
+  movieId     Int
+
+  watchlist   Watchlist @relation(fields: [watchlistId], references: [id])
+  movie       Movie     @relation(fields: [movieId], references: [id])
+
+  @@id([watchlistId, movieId])
+}
